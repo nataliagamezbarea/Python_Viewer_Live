@@ -1,0 +1,71 @@
+{
+  "name": "PythonViewer",
+  "displayName": "Python Viewer Live",
+  "description": "Ejecutar archivo Python desde Visual Studio Code.",
+  "version": "1.0.0",
+  "publisher": "NataliaGB",
+  "repository": {
+    "url": "https://github.com/nataliagamezbarea/Python_Viewer_Live.git"
+  },
+  "icon": "icons/icon.png",
+  "engines": {
+    "vscode": "^1.52.0"
+  },
+  "activationEvents": [
+    "onCommand:createPythonPackage.executePythonFile"
+  ],
+  "main": "src/extension.js",
+  "contributes": {
+    "menus": {
+      "editor/title": [
+        {
+          "command": "createPythonPackage.executePythonFile",
+          "when": "resourceExtname == .py",
+          "group": "navigation",
+          "icon": {
+            "dark": "icons/icon.png",
+            "light": "icons/icon.png"
+          }
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "createPythonPackage.executePythonFile",
+          "when": "resourceExtname == .py",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "createPythonPackage.executePythonFile",
+          "when": "resourceExtname == .py",
+          "group": "navigation"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "createPythonPackage.executePythonFile",
+        "title": "Ejecutar archivo Python",
+        "icon": "icons/icon.png"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.52.0",
+    "eslint": "^7.15.0",
+    "typescript": "^4.1.2",
+    "vscode": "^1.1.28",
+    "@types/node": "^10.12.21",
+    "@types/mocha": "^2.2.42"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
