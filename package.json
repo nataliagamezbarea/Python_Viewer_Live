@@ -2,7 +2,7 @@
   "name": "PythonViewer",
   "displayName": "Python Viewer Live",
   "description": "Ejecutar archivo Python desde Visual Studio Code.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "NataliaGB",
   "repository": {
     "url": "https://github.com/nataliagamezbarea/Python_Viewer_Live.git"

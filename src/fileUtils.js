@@ -1,8 +1,10 @@
+// @ts-nocheck
 const fs = require("fs");
 const path = require("path");
-const vscode = require("vscode");  
+const vscode = require("vscode");
 
 let outputPanel = null;
+let standardInputIndex = 0;
 
 function obtenerRootDir() {
   return vscode.workspace.workspaceFolders[0].uri.fsPath; 
@@ -44,20 +46,35 @@ function obtenerRutaImportacion(codigoPython) {
 }
 
 function modificarInputs(codigoPython, standardInput) {
-  const inputRegex = /input\(["'](.*?)["']\)/g;
-  let index = 0;
+  return `
+import builtins
+import sys
 
-  return codigoPython.replace(inputRegex, (match, p1) => {
-    if (index < standardInput.length) {
-      const inputValue = standardInput[index++];
-      return `input("${p1} ${inputValue}\\n")`;
-    }
-    return match;
-  });
+_standard_input = ${JSON.stringify(standardInput)}
+_standard_input_index = 0
+_original_input = builtins.input
+
+def custom_input(prompt=None):
+    global _standard_input_index
+    if _standard_input_index < len(_standard_input):
+        result = _standard_input[_standard_input_index]
+        _standard_input_index += 1
+        if prompt:
+            print(f"{prompt} {result}")
+        else:
+            print(result)
+        return result
+    else:
+        return _original_input(prompt)
+
+builtins.input = custom_input
+
+${codigoPython}
+builtins.input = _original_input
+  `;
 }
 
 function extraerStandardInput(codigoPython) {
-  // @ts-ignore
   const regex = /standard_input\s*=\s*\[(.*?)\]/s;
   const match = regex.exec(codigoPython);
   if (match && match[1]) {
